@@ -16,7 +16,12 @@ class WeatherTests: XCTestCase {
         let objLocation = Location(name: "Chicago")
         let objCondition = Condition(text: "Cloudy", icon: "abc.png")
         let objCurrent  = Current(tempC: 15.0, tempF: 12.0, condition: objCondition)
-        sut?.myModel = WeatherInformation(location: objLocation, current: objCurrent)
+        let objDay = Day(avgTempf: 2.0)
+        let objForcastDay = ForecastDay(date: "06", day: objDay )
+        let objForecast = Forecast(forecastday: [objForcastDay] )
+       
+        
+        sut?.myModel = WeatherInformation(location: objLocation, current: objCurrent, forecast: objForecast)
     }
 
     override func tearDownWithError() throws {
