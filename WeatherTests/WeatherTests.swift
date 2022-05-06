@@ -10,27 +10,48 @@ import XCTest
 
 class WeatherTests: XCTestCase {
 
+    var sut : ViewModel?
     override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+        sut = ViewModel()
+        let objLocation = Location(name: "Chicago")
+        let objCondition = Condition(text: "Cloudy", icon: "abc.png")
+        let objCurrent  = Current(tempC: 15.0, tempF: 12.0, condition: objCondition)
+        sut?.myModel = WeatherInformation(location: objLocation, current: objCurrent)
     }
 
     override func tearDownWithError() throws {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
+        sut = nil
     }
 
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-        // Any test you write for XCTest can be annotated as throws and async.
-        // Mark your test throws to produce an unexpected failure when your test encounters an uncaught error.
-        // Mark your test async to allow awaiting for asynchronous code to complete. Check the results with assertions afterwards.
+    
+    func testfetchWeather() {
+        
+        let expectation = expectation(description: "fetchWeather")
+        
+        sut?.fetchWeather(with: "Chicago", completionHandler: { weatherData in
+            XCTAssertNotNil(weatherData)
+            expectation.fulfill()
+        })
+        wait(for: [expectation], timeout: 5)
     }
-
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
-        }
+    
+    func testGetCityName() {
+        
+        XCTAssertEqual(sut?.getCityName(), "Chicago")
+        
+    }
+    
+    func testGetCityTemp() {
+        XCTAssertEqual(sut?.getCityTemp(), 15.0)
+    }
+    
+    func testGetCityConditionText() {
+        XCTAssertEqual(sut?.getCityConditionText(), "Cloudy")
+    }
+    
+    func testGetCityConfitionIcon() {
+        XCTAssertEqual(sut?.getCityConfitionIcon(), "abc.png")
     }
 
 }
